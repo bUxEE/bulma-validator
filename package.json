@@ -1,0 +1,24 @@
+{
+  "name": "bulma-validator",
+  "version": "1.0.0",
+  "description": "Form validation for Bulma.css",
+  "main": "bulmaValidator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bux23/bulma-validator.git"
+  },
+  "keywords": [
+    "bulma",
+    "form",
+    "validation"
+  ],
+  "author": "Woptima",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bux23/bulma-validator/issues"
+  },
+  "homepage": "https://github.com/bux23/bulma-validator#readme"
+}
