@@ -1,2 +1,107 @@
 # bulma-validator
 Form validation for Bulma.css
+
+<strong>BulmValidator requires JQuery</strong>
+
+You can set custom validations containing patterns, messages, callback methods and async methods.
+
+
+
+<h2>Configruation</h2>
+<pre>
+const config = {
+    form: '#main-form', // form selector
+    lazy: false, // if set to true validation will be executed only when the form is submitted
+    sections: { // each section contains an array of field names
+        section_1: ["amount"], 
+        section_2: ["gender","first_name","last_name","phone_number","email","address","province"]
+    }
+};
+</pre>
+
+<h2>Validations</h2>
+May contain rules (object array), async (async method), callback (simple method) 
+<pre>
+const validations = { 
+    cell: {
+        rules: [
+            {
+                regex: /^((00|\+)\d{2}[- ]?)?3\d{8,9}$/,
+                message: 'Insert a valid phone number'
+            }
+        ]
+    },
+    server: {
+        async:
+            {
+                method: serverRequest, //custom method ,
+                message: 'Error retrieving data from server'
+            }
+    },
+    address: {
+        callback: {
+            method: checkAddress, //custom method
+            message: 'Select an adress from Google autocomplete options' 
+        }
+    },
+    zip: {
+        rules: [
+            {
+                regex: /^[0-9]{5}/,
+                message: 'Invalid Zip code'
+            }
+        ],
+        callback: {
+            method: checkZip, //custom method
+            message: 'Zip code not present in list' 
+        }
+    }
+};
+</pre>
+
+<h2>Initialization</h2>
+<pre>
+var validator = new BulmaValidator(config,validations);
+</pre>
+
+<h2>Methods</h2>
+<h3>validateSection</h3>
+<pre>
+validator.validateSection('section_1');
+</pre>
+
+<h2>Events</h2>
+All events are triggered on the form element
+<h3>submit-valid</h3>
+validation passed on form submit
+<pre>
+validator.form.on('submit-valid',(e) => {
+    ...your code here
+}) 
+</pre>
+<h3>submit-error</h3>
+validation failed on form submit
+<pre>
+validator.form.on('submit-error',(e) => {
+    ...your code here
+}) 
+</pre>
+<h3>validate-section</h3>
+section validation start
+<pre>
+validator.form.on('validate-section',(e,sectionName,sectionValue) => {
+    ...your code here
+}) 
+</pre>
+<h3>validate-section-valid</h3>
+<pre>
+validator.form.on('validate-section-valid',(e,sectionName,sectionValue) => {
+    ...your code here
+}) 
+</pre>
+<h3>validate-section-error</h3>
+<pre>
+validator.form.on('validate-section-error',(e,sectionName,sectionValue) => {
+    ...your code here
+}) 
+</pre>

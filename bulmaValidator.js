@@ -99,7 +99,7 @@ var BulmaValidator = function(settings={},validations={}) {
 
     this.validateField = (el,name,validation,submit=false) => {
         let val = el.val();
-        if(val.length) {
+        if(val && val.length) {
             if(validation && this.validations[validation] && this.validations[validation].rules && this.validations[validation].rules.length) {
                 let valid = this.validations[validation].rules.every((rule) => {
                     if(rule.regex && !rule.regex.test(val)) {
@@ -121,11 +121,11 @@ var BulmaValidator = function(settings={},validations={}) {
                     return false;
                 }
             }
-            if(validation && this.validations[validation] && this.validations[validation].ajax) {
-                this.validations[validation].ajax.method.call(val).then((resp) => {
+            if(validation && this.validations[validation] && this.validations[validation].async) {
+                this.validations[validation].async.method.call(val).then((resp) => {
                     return true;
                 }).catch((err) => {
-                    this.setError(el,(this.validations[validation].ajax.message || false),submit)
+                    this.setError(el,(this.validations[validation].async.message || false),submit)
                     return false;
                 })
             }
@@ -171,6 +171,9 @@ var BulmaValidator = function(settings={},validations={}) {
 
     this.validateSection = (section) => {
         if(this.config.sections[section] && this.config.sections[section].length) {
+            
+            this.form.trigger('validate-section',sectionName,this.config.sections[section]);
+            
             let allValid = true;
             this.config.sections[section].forEach((input) => {
                 this.form.find('[name="'+input+'"]').each((index, element) => {
@@ -179,6 +182,11 @@ var BulmaValidator = function(settings={},validations={}) {
                     allValid = allValid && valid;
                 });
             })
+            if(allValid) {
+                this.form.trigger('validate-section-valid',sectionName,this.config.sections[section]);
+            } else {
+                this.form.trigger('validate-section-failed',sectionName,this.config.sections[section]);
+            }
             return allValid;
         } else {
             return true;
@@ -282,7 +290,10 @@ var BulmaValidator = function(settings={},validations={}) {
     this.form.find("[type=submit]").click((e) => {
         e.preventDefault();
         if(this.validateAll()) {
+            this.form.trigger('submit-valid');
             this.form.submit();
+        } else {
+            this.form.trigger('submit-error');
         }
     })
 
