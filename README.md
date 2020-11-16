@@ -11,11 +11,20 @@ You can set custom validations containing patterns, messages, callback methods a
 <pre>
 const config = {
     form: '#main-form', // form selector
-    lazy: false, // if set to true validation will be executed only when the form is submitted
-    sections: { // each section contains an array of field names
+    lazy: true,  // if set to true validation will be executed only when the form is submitted
+		scroll: true, // scroll to error
+		requiredMessage: 'Required field',
+		successIcon: 'fas fa-check',
+		errorIcon: 'fas fa-exclamation-triangle',
+		sections: { // each section contains an array of field names
         section_1: ["amount"], 
         section_2: ["gender","first_name","last_name","phone_number","email","address","province"]
     }
+		classes: { 
+		    danger: "is-danger", // class applied to input on passed validation
+		    success: "is-success", // class applied to input on failed validation
+		    helptext: "help" // selector for validation text
+		}
 };
 </pre>
 
