@@ -63,7 +63,7 @@ var BulmaValidator = function(settings={},validations={}) {
     this.setError = (el,message="",submit=false) => {
         el.removeClass(this.config.classes.success)
             .addClass(this.config.classes.danger)
-            .closest(".field").find("." + this.config.classes.helptext).removeClass('hidden')
+            .closest(".field").find("." + this.config.classes.helptext).removeClass('is-hidden')
 
         if(message) {
           el.closest(".field").find("." + this.config.classes.helptext).html(message);
@@ -82,7 +82,7 @@ var BulmaValidator = function(settings={},validations={}) {
     this.setSuccess = (el) => {
         el.removeClass(this.config.classes.danger)
             .addClass(this.config.classes.success)
-            .closest(".field").find("." + this.config.classes.helptext).addClass('hidden')
+            .closest(".field").find("." + this.config.classes.helptext).addClass('is-hidden')
 
         this.removeIcon(el);
         this.addSuccessIcon(el);
@@ -142,14 +142,14 @@ var BulmaValidator = function(settings={},validations={}) {
         if(el.attr('required')) {
             if(!$('[name="'+name+'"]:checked').length) {
                 this.setError(el,this.config.requiredMessage,submit);
-                $('[name="'+name+'"]:not(:checked)').closest('label').addClass('is-danger').closest(".field").find("." + this.config.classes.helptext).removeClass('hidden')
+                $('[name="'+name+'"]:not(:checked)').closest('label').addClass('is-danger').closest(".field").find("." + this.config.classes.helptext).removeClass('is-hidden')
                 return false;
             } else {
-                $('[name="'+name+'"]:checked').closest('label').addClass('is-success').closest(".field").find("." + this.config.classes.helptext).addClass('hidden')
+                $('[name="'+name+'"]:checked').closest('label').addClass('is-success').closest(".field").find("." + this.config.classes.helptext).addClass('is-hidden')
                 return true;
             }
         } else {
-            $('[name="'+name+'"]:checked').closest('label').addClass('is-success').closest(".field").find("." + this.config.classes.helptext).addClass('hidden')
+            $('[name="'+name+'"]:checked').closest('label').addClass('is-success').closest(".field").find("." + this.config.classes.helptext).addClass('is-hidden')
             return true;
         }
     }

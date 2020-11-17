@@ -13,7 +13,7 @@ Validation is applied to the field through the <strong>data-validation</strong> 
   <div class="control">
     <input class="input only-num" type="text" placeholder="phone number" data-validation="phone" name="phone_number">
   </div>
-  <p class="help">This is a help text</p>
+  <p class="help is-hidden">This is a help text</p>
 </div>
 ```
 

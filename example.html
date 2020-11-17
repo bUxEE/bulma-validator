@@ -13,14 +13,17 @@
 		<form id="main-form">
 
 			<div class="control">
-				<label class="radio">
-					<input type="radio" value="male" name="gender" required>
-					Male
-				</label>
-				<label class="radio">
-					<input type="radio" value="female" name="gender" required>
-					Female
-				</label>
+				<div>
+					<label class="radio">
+						<input type="radio" value="male" name="gender" required>
+						Male
+					</label>
+					<label class="radio">
+						<input type="radio" value="female" name="gender" required>
+						Female
+					</label>
+				</div>
+				<p class="help is-hidden">Select a gender</p>
 			</div>
 
 			<div class="field">
@@ -28,7 +31,7 @@
 				<div class="control">
 					<input class="input only-num" type="text" name="first_name" required>
 				</div>
-				<p class="help">Insert a name</p>
+				<p class="help is-hidden">Insert a name</p>
 			</div>
 
 			<div class="field">
@@ -36,7 +39,7 @@
 				<div class="control">
 					<input class="input only-num" type="text" name="last_name" required>
 				</div>
-				<p class="help">Insert a last name</p>
+				<p class="help is-hidden">Insert a last name</p>
 			</div>
 
 			<div class="field">
@@ -44,7 +47,7 @@
 				<div class="control">
 					<input class="input only-num" type="text" data-validation="phone" name="phone_number" required>
 				</div>
-				<p class="help">Not a valid phone number</p>
+				<p class="help is-hidden">Not a valid phone number</p>
 			</div>
 
 			<div class="field">
@@ -52,7 +55,7 @@
 				<div class="control">
 					<input class="input only-num" type="text" data-validation="email" name="email" required>
 				</div>
-				<p class="help">Not a valid email</p>
+				<p class="help is-hidden">Not a valid email</p>
 			</div>
 
 			<div class="field">
@@ -60,7 +63,7 @@
 				<div class="control">
 					<input class="input only-num" type="text" data-validation="address" name="address" required>
 				</div>
-				<p class="help">Select an address</p>
+				<p class="help is-hidden">Select an address</p>
 			</div>
 
 			<input type="submit" value="submit">
