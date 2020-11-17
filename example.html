@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>Bulma Validator example</title>
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<h1>Sample form</h1>
+
+		<form id="main-form">
+
+			<div class="control">
+				<label class="radio">
+					<input type="radio" value="male" name="gender" required>
+					Male
+				</label>
+				<label class="radio">
+					<input type="radio" value="female" name="gender" required>
+					Female
+				</label>
+			</div>
+
+			<div class="field">
+				<label class="label">first name</label>
+				<div class="control">
+					<input class="input only-num" type="text" name="first_name" required>
+				</div>
+				<p class="help">Insert a name</p>
+			</div>
+
+			<div class="field">
+				<label class="label">last name</label>
+				<div class="control">
+					<input class="input only-num" type="text" name="last_name" required>
+				</div>
+				<p class="help">Insert a last name</p>
+			</div>
+
+			<div class="field">
+				<label class="label">phone number</label>
+				<div class="control">
+					<input class="input only-num" type="text" data-validation="phone" name="phone_number" required>
+				</div>
+				<p class="help">Not a valid phone number</p>
+			</div>
+
+			<div class="field">
+				<label class="label">email</label>
+				<div class="control">
+					<input class="input only-num" type="text" data-validation="email" name="email" required>
+				</div>
+				<p class="help">Not a valid email</p>
+			</div>
+
+			<div class="field">
+				<label class="label">address</label>
+				<div class="control">
+					<input class="input only-num" type="text" data-validation="address" name="address" required>
+				</div>
+				<p class="help">Select an address</p>
+			</div>
+
+			<input type="submit" value="submit">
+		</form>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+		<script src="./bulmaValidator.js"></script>
+		<script>
+
+			serverRequest(val,el,name) {
+				return true;
+			}
+
+			checkAddress(val,el,name) {
+				return true;
+			}
+
+			const config = {
+				form: '#main-form', // form selector
+				lazy: true,  // if set to true validation will be executed only when the form is submitted
+				scroll: true, // scroll to error
+				requiredMessage: 'Required field',
+				successIcon: 'fas fa-check',
+				errorIcon: 'fas fa-exclamation-triangle',
+				sections: { // each section contains an array of field names
+					section_1: ["gender","first_name","last_name","phone_number","email","address"]
+				}
+				classes: { 
+					danger: "is-danger", // class applied to input on passed validation
+					success: "is-success", // class applied to input on failed validation
+					helptext: "help" // selector for validation text
+				}
+			};
+
+			const validations = { 
+				phone: {
+					rules: [
+						{
+							regex: /^((00|\+)\d{2}[- ]?)?3\d{8,9}$/,
+							message: 'Insert a valid phone number'
+						}
+					]
+				},
+				server: {
+					async: {
+						method: serverRequest,
+						message: 'Error retrieving data from server'
+					}
+				},
+				address: {
+					callback: {
+						method: checkAddress,
+						message: 'Not a valid address' 
+					}
+				}
+			};
+
+			jQuery(document).ready(function($) {
+				var validator = new BulmaValidator(config,validations);
+			});
+		</script>
+	</body>
+</html>

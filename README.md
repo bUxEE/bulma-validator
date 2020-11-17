@@ -5,7 +5,17 @@ Form validation for Bulma.css
 
 You can set custom validations containing patterns, messages, callback methods and async methods.
 
-
+<h2>HTML</h2>
+Validation is applied to the field through the <strong>data-validation</strong> attribute
+```html
+<div class="field">
+  <label class="label">Phone number</label>
+  <div class="control">
+    <input class="input only-num" type="text" placeholder="phone number" data-validation="phone" name="phone_number">
+  </div>
+  <p class="help">This is a help text</p>
+</div>
+```
 
 <h2>Configruation</h2>
 <pre>
@@ -72,6 +82,13 @@ const validations = {
 <pre>
 var validator = new BulmaValidator(config,validations);
 </pre>
+
+<h2>Helper classes</h2>
+<h3 style="margin-bottom: 0">only-num</h3>allows only the input of numbers
+```html
+<input class="input only-num" type="text">
+```
+
 
 <h2>Methods</h2>
 <h3>validateSection</h3>

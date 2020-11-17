@@ -99,7 +99,7 @@ var BulmaValidator = function(settings={},validations={}) {
 
     this.validateField = (el,name,validation,submit=false) => {
         let val = el.val();
-        if(val && val.length) {
+        if(typeof value !== 'undefined' && val !== null) {
             if(validation && this.validations[validation] && this.validations[validation].rules && this.validations[validation].rules.length) {
                 let valid = this.validations[validation].rules.every((rule) => {
                     if(rule.regex && !rule.regex.test(val)) {
@@ -114,7 +114,7 @@ var BulmaValidator = function(settings={},validations={}) {
 
             }
             if(validation && this.validations[validation] && this.validations[validation].callback) {
-                if(this.validations[validation].callback.method.call(val)) {
+                if(this.validations[validation].callback.method.call(val,el,name)) {
                     return true;
                 } else {
                     this.setError(el,(this.validations[validation].callback.message || false),submit)
@@ -122,7 +122,7 @@ var BulmaValidator = function(settings={},validations={}) {
                 }
             }
             if(validation && this.validations[validation] && this.validations[validation].async) {
-                this.validations[validation].async.method.call(val).then((resp) => {
+                this.validations[validation].async.method.call(val,el,name).then((resp) => {
                     return true;
                 }).catch((err) => {
                     this.setError(el,(this.validations[validation].async.message || false),submit)
@@ -229,43 +229,18 @@ var BulmaValidator = function(settings={},validations={}) {
 
     this.blockType = (e,el) => {
         let keyCode = (event.keyCode ? event.keyCode : event.which);
-        switch(true) {
-            case el.hasClass('only-num'):
-                if ((keyCode < 48 || keyCode > 57) && keyCode !== 46 && keyCode !== 8) {
-                    event.preventDefault();
-                }
-                break;
-            case el.hasClass('only-float'):
-                if ((keyCode < 48 || keyCode > 57) && keyCode !== 46 && keyCode !== 8 && keyCode !== 190) {
-                    event.preventDefault();
-                }
-                break;
-            case el.hasClass('phone-num'):
-                if ((keyCode < 48 || keyCode > 57) && keyCode !== 46 && keyCode !== 8 && keyCode !== 187) {
-                    console.log("fsdf")
-                    event.preventDefault();
-                }
-                break;
+        if(el.hasClass('only-num')) {
+            if ((keyCode < 48 || keyCode > 57) && keyCode !== 46 && keyCode !== 8) {
+                event.preventDefault();
+            }
         }
     }
 
     this.blockPaste = (e,el) => {
-        switch(true) {
-            case el.hasClass('only-num'):
-                setTimeout(() => {
-                    el.val(el.val().replace(/[^0-9]/g, ''));
-                },100)
-                break;
-            case el.hasClass('only-float'):
-                setTimeout(() => {
-                    el.val(el.val().replace(/[^0-9\.]/g, ''));
-                },100)
-                break;
-            case el.hasClass('phone-num'):
-                setTimeout(() => {
-                    el.val(el.val().replace(/[^0-9\+]/g, ''));
-                },100)
-                break;
+        if(el.hasClass('only-num')) {
+            setTimeout(() => {
+                el.val(el.val().replace(/[^0-9]/g, ''));
+            },10)
         }
     }
        
