@@ -39,7 +39,9 @@ const config = {
 </pre>
 
 <h2>Validations</h2>
-May contain rules (object array), async (async method), callback (simple method) 
+May contain rules (object array), async (async method), callback (simple method)
+
+Bundled validations: number - float - email - url - strongPassword
 <pre>
 const validations = { 
     cell: {
