@@ -28,7 +28,7 @@ var BulmaValidator = function(settings={},validations={}) {
         float: {
             rules: [
                 {
-                    regex: /^[0-9.]+/,
+                    regex: /[+-]?([0-9]*[.])?[0-9]+/,
                     message: 'Not a valid float'
                 }
             ]
@@ -38,6 +38,30 @@ var BulmaValidator = function(settings={},validations={}) {
                 {
                     regex: /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,7}$/,
                     message: 'Not a valid email'
+                }
+            ]
+        },
+        url: {
+            rules: [
+                {
+                    regex: /(http(s)?://)?([\w-]+\.)+[\w-]+[.com]+(/[/?%&=]*)?/s,
+                    message: 'Not a valid URL'
+                }
+            ]
+        },
+        strongPassword: {
+            rules: [
+                {
+                    regex: /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+)$/,
+                    message: 'Password must contain at least 1 lowercase, 1 uppercase and 1 number'
+                },
+                {
+                    regex: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9]+){8,}$/,
+                    message: 'Password must be at least 8 characters long'
+                },
+                {
+                    regex: /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#\$%&])([a-zA-Z0-9@#\$%&]+){8,}$/,
+                    message: 'Password must contain a special character (@#$%&)'
                 }
             ]
         }
