@@ -44,7 +44,7 @@ var BulmaValidator = function(settings={},validations={}) {
         url: {
             rules: [
                 {
-                    regex: /(http(s)?://)?([\w-]+\.)+[\w-]+[.com]+(/[/?%&=]*)?/s,
+                    regex: /(http(s)?:\/\/)?([\w-]+\.)+[\w-]+[.com]+(\/[/?%&=]*)?/s,
                     message: 'Not a valid URL'
                 }
             ]
@@ -123,7 +123,7 @@ var BulmaValidator = function(settings={},validations={}) {
 
     this.validateField = (el,name,validation,submit=false) => {
         let val = el.val();
-        if(typeof value !== 'undefined' && val !== null) {
+        if(typeof val !== 'undefined' && val !== null) {
             if(validation && this.validations[validation] && this.validations[validation].rules && this.validations[validation].rules.length) {
                 let valid = this.validations[validation].rules.every((rule) => {
                     if(rule.regex && !rule.regex.test(val)) {
@@ -267,8 +267,6 @@ var BulmaValidator = function(settings={},validations={}) {
             },10)
         }
     }
-       
-
     
     this.elements.each((index, el) => {
         let $el = $(el);
@@ -296,11 +294,4 @@ var BulmaValidator = function(settings={},validations={}) {
         }
     })
 
-    return this;
 };
-
-
-if (typeof exports === 'object') {
-    module.exports.bulmaValidator = BulmaValidator;
-}
- 
