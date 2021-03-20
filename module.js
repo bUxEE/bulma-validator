@@ -1,4 +1,4 @@
-import { $ as $$, addClass, removeClass, hasClass, val, append, closest, html, find, on, trigger, submit, each, animate } from 'dom7';
+import { $ as $$, addClass, removeClass, hasClass, val, append, closest, html, find, on, attr, trigger, submit, each, animate } from 'dom7';
 
 $$.fn.addClass = addClass;
 $$.fn.removeClass = removeClass;
