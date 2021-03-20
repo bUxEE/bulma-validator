@@ -15,7 +15,6 @@ $$.fn.submit = submit;
 $$.fn.each = each;
 $$.fn.animate = animate;
 
-
 export default {
 
     constructor(settings={},validations={}) {
@@ -221,9 +220,9 @@ export default {
             
             let allValid = true;
             this.config.sections[section].forEach((input) => {
-                this.form.find('[name="'+input+'"]').each((index, element) => {
-                    let $$el = $$(element);
-                    let valid = this.validate($$el,true)
+                this.form.find('[name="'+input+'"]').each((index, el) => {
+                    let elem = $$(el);
+                    let valid = this.validate(elem,true)
                     allValid = allValid && valid;
                 });
             })
@@ -241,9 +240,9 @@ export default {
     validateAll() {
         let allValid = true;
         this.elements.each((index, el) => {
-            let $$el = $$(el);
-            if($$el.length) {
-                let valid = this.validate($$el,true);
+            let elem = $$(el);
+            if(elem.length) {
+                let valid = this.validate(elem,true);
                 allValid = valid && allValid;
             }
         });
@@ -306,7 +305,7 @@ export default {
             }
         });
         
-        this.form.find("[type=submit]").click((e) => {
+        this.form.find("[type=submit]").on('click',(e) => {
             e.preventDefault();
             if(this.validateAll()) {
                 this.form.trigger('submit-valid');
