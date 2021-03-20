@@ -1,6 +1,6 @@
 {
   "name": "bulma-validator",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Form validation for Bulma.css",
   "main": "module.js",
   "scripts": {
