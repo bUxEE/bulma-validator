@@ -9,6 +9,7 @@ $$.fn.closest = closest;
 $$.fn.html = html;
 $$.fn.find = find;
 $$.fn.on = on;
+$$.fn.attr = attr;
 $$.fn.trigger = trigger;
 $$.fn.submit = submit;
 $$.fn.each = each;

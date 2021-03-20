@@ -1,7 +1,7 @@
 # bulma-validator
 Form validation for Bulma.css
 
-<strong>BulmValidator requires JQuery</strong>
+<strong>Unless imported as module BulmValidator requires JQuery</strong>
 
 You can set custom validations containing patterns, messages, callback methods and async methods.
 
