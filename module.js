@@ -1,21 +1,6 @@
-import { $ as $$, addClass, removeClass, hasClass, val, append, closest, html, find, on, attr, trigger, submit, each, animate } from 'dom7';
+import $$ from 'cash-dom';
 
-$$.fn.addClass = addClass;
-$$.fn.removeClass = removeClass;
-$$.fn.hasClass = hasClass;
-$$.fn.val = val;
-$$.fn.append = append;
-$$.fn.closest = closest;
-$$.fn.html = html;
-$$.fn.find = find;
-$$.fn.on = on;
-$$.fn.attr = attr;
-$$.fn.trigger = trigger;
-$$.fn.submit = submit;
-$$.fn.each = each;
-$$.fn.animate = animate;
-
-export default {
+export default class BulmaValidator {
 
     constructor(settings={},validations={}) {
 
@@ -95,14 +80,14 @@ export default {
         this.errorIcon = '<span class="icon is-small is-right has-text-warning"><i class="'+this.config.errorIcon+'"></i></span>';
 
         this.init();
-    },
+    }
 
     setNormal(el) {
         el.removeClass(this.config.classes.success)
             .removeClass(this.config.classes.danger)
         
         this.removeIcon(el);
-    },
+    }
 
     setError(el,message="",submit=false) {
         el.removeClass(this.config.classes.success)
@@ -117,11 +102,13 @@ export default {
         this.addErrorIcon(el)
 
         if(this.config.scroll && submit) {
-            $$('html, body').animate({
-                scrollTop: $$('.control .is-danger').first().offset().top -60
-            }, 600, 'swing');
+            window.scrollTo({
+              top: $$('.control .is-danger').first().offset().top -60,
+              left: 0,
+              behavior: 'smooth'
+            });
         }
-    },
+    }
 
     setSuccess(el) {
         el.removeClass(this.config.classes.danger)
@@ -130,7 +117,7 @@ export default {
 
         this.removeIcon(el);
         this.addSuccessIcon(el);
-    },
+    }
 
     checkRequired(el,submit=false) {
         let val = el.val();
@@ -139,7 +126,7 @@ export default {
             return false;
         }
         return true;
-    },
+    }
 
     validateField(el,name,validation,submit=false) {
         let val = el.val();
@@ -179,7 +166,7 @@ export default {
             this.setNormal(el);
             return true;
         }
-    },
+    }
 
     validateCheckRadio(el,name,submit=false) {
         $$('[name="'+name+'"]').closest('label').removeClass('is-success is-danger');
@@ -196,7 +183,7 @@ export default {
             $$('[name="'+name+'"]:checked').closest('label').addClass('is-success').closest(".field").find("." + this.config.classes.helptext).addClass('is-hidden')
             return true;
         }
-    },
+    }
 
     validate(el,submit=false) {
         let validation = el.attr('data-validation');
@@ -211,7 +198,7 @@ export default {
             if(!reqCheck) return false;
             return this.validateField(el,name,validation,submit)
         }
-    },
+    }
 
     validateSection(section) {
         if(this.config.sections[section] && this.config.sections[section].length) {
@@ -219,8 +206,8 @@ export default {
             this.form.trigger('validate-section',sectionName,this.config.sections[section]);
             
             let allValid = true;
-            this.config.sections[section].forEach((input) => {
-                this.form.find('[name="'+input+'"]').each((index, el) => {
+            this.config.sections[section].each((input) => {
+                this.form.find('[name="'+input+'"]').each((index,el) => {
                     let elem = $$(el);
                     let valid = this.validate(elem,true)
                     allValid = allValid && valid;
@@ -235,11 +222,11 @@ export default {
         } else {
             return true;
         }
-    },
+    }
 
     validateAll() {
         let allValid = true;
-        this.elements.each((index, el) => {
+        this.elements.each((index,el) => {
             let elem = $$(el);
             if(elem.length) {
                 let valid = this.validate(elem,true);
@@ -247,7 +234,7 @@ export default {
             }
         });
         return allValid;
-    },
+    }
     
     addErrorIcon(el) {
         let control = el.closest('.control');
@@ -255,21 +242,21 @@ export default {
             control.append(this.errorIcon);
         }
 
-    },
+    }
 
     addSuccessIcon(el) {
         let control = el.closest('.control');
         if(control.hasClass("has-icons-right validation-icons")){
             control.append(this.successIcon);
         }
-    },
+    }
     
     removeIcon(el) {
         let control = el.closest('.control');
         if(control.hasClass("has-icons-right validation-icons")){
             el.siblings(".is-right").remove();
         }
-    },
+    }
 
     blockType(e,el) {
         let keyCode = (event.keyCode ? event.keyCode : event.which);
@@ -278,7 +265,7 @@ export default {
                 event.preventDefault();
             }
         }
-    },
+    }
 
     blockPaste(e,el) {
         if(el.hasClass('only-num')) {
@@ -286,10 +273,10 @@ export default {
                 el.val(el.val().replace(/[^0-9]/g, ''));
             },10)
         }
-    },
+    }
        
     init() {
-        this.elements.each((index, el) => {
+        this.elements.each((index,el) => {
             let elem = $$(el);
             elem.on('keydown', (event) => {
               this.blockType(event,elem);
@@ -309,7 +296,7 @@ export default {
             e.preventDefault();
             if(this.validateAll()) {
                 this.form.trigger('submit-valid');
-                this.form.submit();
+                this.form.trigger('submit');
             } else {
                 this.form.trigger('submit-error');
             }
