@@ -1,5 +1,6 @@
 import $$ from 'cash-dom';
 
+
 export default class BulmaValidator {
 
     constructor(settings={},validations={}) {
@@ -56,6 +57,14 @@ export default class BulmaValidator {
                     }
                 ]
             },
+            no5: {
+                rules: [
+                    {
+                        regex: /^((?!5).)*$/s,
+                        message: 'No 5 accepted!'
+                    }
+                ]
+            },
             strongPassword: {
                 rules: [
                     {
@@ -75,7 +84,7 @@ export default class BulmaValidator {
         }, validations)
         
         this.form = $$(this.config.form);
-        this.elements = this.form.find("input, select, textarea");
+        this.elements = this.form.find('input:not([type="submit"]), select, textarea');
         this.successIcon = '<span class="icon is-small is-right has-text-success"><i class="'+this.config.successIcon+'"></i></span>';
         this.errorIcon = '<span class="icon is-small is-right has-text-warning"><i class="'+this.config.errorIcon+'"></i></span>';
 
@@ -128,43 +137,47 @@ export default class BulmaValidator {
         return true;
     }
 
-    validateField(el,name,validation,submit=false) {
+    validateField(el,name,validations,submit=false) {
         let val = el.val();
-        if(typeof val !== 'undefined' && val !== null) {
-            if(validation && this.validations[validation] && this.validations[validation].rules && this.validations[validation].rules.length) {
-                let valid = this.validations[validation].rules.every((rule) => {
-                    if(rule.regex && !rule.regex.test(val)) {
-                        this.setError(el,(rule.message || false),submit)
-                        return false;
-                    }
-                    return true;
-                });
-                if(!valid) {
-                    return false;
-                }
-
-            }
-            if(validation && this.validations[validation] && this.validations[validation].callback) {
-                if(this.validations[validation].callback.method.call(val,el,name)) {
-                    return true;
-                } else {
-                    this.setError(el,(this.validations[validation].callback.message || false),submit)
-                    return false;
-                }
-            }
-            if(validation && this.validations[validation] && this.validations[validation].async) {
-                this.validations[validation].async.method.call(val,el,name).then((resp) => {
-                    return true;
-                }).catch((err) => {
-                    this.setError(el,(this.validations[validation].async.message || false),submit)
-                    return false;
-                })
-            }
-            this.setSuccess(el);
-            return true;
-        } else {
+        if(typeof val == 'undefined' || val == null) {
             this.setNormal(el);
             return true;
+        }
+        if(!validations || !validations.length) {
+            this.setSuccess(el);
+            return true;
+        }
+
+        let valid = true;
+        validations = validations.split(' ');
+        validations.forEach((validation) => {
+            if(valid && validation && this.validations[validation] && this.validations[validation].rules && this.validations[validation].rules.length) {
+                this.validations[validation].rules.forEach((rule) => {
+                    if(valid && rule.regex && !rule.regex.test(val)) {
+                        valid = false;
+                        this.setError(el,(rule.message || false),submit)
+                    }
+                });
+            }
+            if(valid && validation && this.validations[validation] && this.validations[validation].callback) {
+                if(this.validations[validation].callback.method.call(val,el,name)) {
+                    valid = true;
+                } else {
+                    valid = false;
+                    this.setError(el,(this.validations[validation].callback.message || false),submit)
+                }
+            }
+            if(valid && validation && this.validations[validation] && this.validations[validation].async) {
+                this.validations[validation].async.method.call(val,el,name).then((resp) => {
+                    valid = true;
+                }).catch((err) => {
+                    valid = false;
+                    this.setError(el,(this.validations[validation].async.message || false),submit)
+                })
+            }
+        });
+        if(valid) {
+            this.setSuccess(el);
         }
     }
 

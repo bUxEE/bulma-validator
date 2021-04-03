@@ -123,41 +123,45 @@ var BulmaValidator = function(settings={},validations={}) {
 
     this.validateField = (el,name,validation,submit=false) => {
         let val = el.val();
-        if(typeof val !== 'undefined' && val !== null) {
-            if(validation && this.validations[validation] && this.validations[validation].rules && this.validations[validation].rules.length) {
-                let valid = this.validations[validation].rules.every((rule) => {
-                    if(rule.regex && !rule.regex.test(val)) {
-                        this.setError(el,(rule.message || false),submit)
-                        return false;
-                    }
-                    return true;
-                });
-                if(!valid) {
-                    return false;
-                }
-
-            }
-            if(validation && this.validations[validation] && this.validations[validation].callback) {
-                if(this.validations[validation].callback.method.call(val,el,name)) {
-                    return true;
-                } else {
-                    this.setError(el,(this.validations[validation].callback.message || false),submit)
-                    return false;
-                }
-            }
-            if(validation && this.validations[validation] && this.validations[validation].async) {
-                this.validations[validation].async.method.call(val,el,name).then((resp) => {
-                    return true;
-                }).catch((err) => {
-                    this.setError(el,(this.validations[validation].async.message || false),submit)
-                    return false;
-                })
-            }
-            this.setSuccess(el);
-            return true;
-        } else {
+        if(typeof val == 'undefined' || val == null) {
             this.setNormal(el);
             return true;
+        }
+        if(!validations || !validations.length) {
+            this.setSuccess(el);
+            return true;
+        }
+
+        let valid = true;
+        validations = validations.split(' ');
+        validations.forEach((validation) => {
+            if(valid && validation && this.validations[validation] && this.validations[validation].rules && this.validations[validation].rules.length) {
+                this.validations[validation].rules.forEach((rule) => {
+                    if(valid && rule.regex && !rule.regex.test(val)) {
+                        valid = false;
+                        this.setError(el,(rule.message || false),submit)
+                    }
+                });
+            }
+            if(valid && validation && this.validations[validation] && this.validations[validation].callback) {
+                if(this.validations[validation].callback.method.call(val,el,name)) {
+                    valid = true;
+                } else {
+                    valid = false;
+                    this.setError(el,(this.validations[validation].callback.message || false),submit)
+                }
+            }
+            if(valid && validation && this.validations[validation] && this.validations[validation].async) {
+                this.validations[validation].async.method.call(val,el,name).then((resp) => {
+                    valid = true;
+                }).catch((err) => {
+                    valid = false;
+                    this.setError(el,(this.validations[validation].async.message || false),submit)
+                })
+            }
+        });
+        if(valid) {
+            this.setSuccess(el);
         }
     }
 
@@ -179,18 +183,28 @@ var BulmaValidator = function(settings={},validations={}) {
     }
 
     this.validate = (el,submit=false) => {
-        let validation = el.attr('data-validation');
+        let validations = el.attr('data-validation').split(' ');
         let type = el.attr('type');
         let name = el.attr('name')
         let val = el.val();
+        let valid = true;
 
-        if(type == 'radio' || type == 'checkbox') {
-            return this.validateCheckRadio(el,name,submit)
-        } else {
-            let reqCheck = this.checkRequired(el);
-            if(!reqCheck) return false;
-            return this.validateField(el,name,validation,submit)
-        }
+        if(!validations.length) return valid;
+
+        validations.some((validation) => {
+            if(type == 'radio' || type == 'checkbox') {
+                valid = valid && this.validateCheckRadio(el,name,submit)
+            } else {
+                let reqCheck = this.checkRequired(el);
+                if(!reqCheck)  {
+                    valid = false;
+                    return true;
+                }
+                valid = valid &&  this.validateField(el,name,validation,submit)
+            }
+        })
+        
+        return valid;
     }
 
     this.validateSection = (section) => {
