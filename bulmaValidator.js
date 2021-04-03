@@ -183,28 +183,18 @@ var BulmaValidator = function(settings={},validations={}) {
     }
 
     this.validate = (el,submit=false) => {
-        let validations = el.attr('data-validation').split(' ');
+        let validation = el.attr('data-validation');
         let type = el.attr('type');
         let name = el.attr('name')
         let val = el.val();
-        let valid = true;
 
-        if(!validations.length) return valid;
-
-        validations.some((validation) => {
-            if(type == 'radio' || type == 'checkbox') {
-                valid = valid && this.validateCheckRadio(el,name,submit)
-            } else {
-                let reqCheck = this.checkRequired(el);
-                if(!reqCheck)  {
-                    valid = false;
-                    return true;
-                }
-                valid = valid &&  this.validateField(el,name,validation,submit)
-            }
-        })
-        
-        return valid;
+        if(type == 'radio' || type == 'checkbox') {
+            return this.validateCheckRadio(el,name,submit)
+        } else {
+            let reqCheck = this.checkRequired(el);
+            if(!reqCheck) return false;
+            return this.validateField(el,name,validation,submit)
+        }
     }
 
     this.validateSection = (section) => {
