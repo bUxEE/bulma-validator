@@ -73,7 +73,7 @@ var BulmaValidator = function(settings={},validations={}) {
     }
 
     this.form = $(this.config.form);
-    this.elements = this.form.find("input, select, textarea");
+    this.elements = this.form.find('input:not([type="submit"]), select, textarea');
     this.successIcon = '<span class="icon is-small is-right has-text-success"><i class="'+this.config.successIcon+'"></i></span>';
     this.errorIcon = '<span class="icon is-small is-right has-text-warning"><i class="'+this.config.errorIcon+'"></i></span>';
 
